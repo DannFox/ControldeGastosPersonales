@@ -6,10 +6,10 @@
         android:title="Dashboard" />
     <item
         android:id="@+id/nav_accounts"
-        android:icon="@drawable/baseline_account_balance_wallet_24"
+        android:icon="@drawable/baseline_account_balance_24"
         android:title="Cuentas" />
     <item
         android:id="@+id/nav_payments"
-        android:icon="@drawable/baseline_add_card_24"
+        android:icon="@drawable/baseline_calendar_today_24"
         android:title="Pagos" />
 </menu>
