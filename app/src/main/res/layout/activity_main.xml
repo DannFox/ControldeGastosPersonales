@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottomNav"> <!-- Contenido encima del BottomNav -->
+        app:layout_constraintBottom_toTopOf="@id/bottomNavContainer"> <!-- Contenido encima del BottomNav -->
 
         <TextView
             android:id="@+id/tvBalanceTotal"
@@ -42,14 +42,16 @@
             android:layout_gravity="center" />
     </LinearLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNav"
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:id="@+id/bottomNavContainer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        app:layout_constraintEnd_toEndOf="parent" >
+
+        <include layout="@layout/reusable_bottom_navigation" />
+    </FrameLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddExpense"
@@ -59,7 +61,7 @@
         android:layout_marginBottom="16dp"
         android:contentDescription="Agregar Gasto"
         app:srcCompat="@android:drawable/ic_input_add"
-        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavContainer"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
