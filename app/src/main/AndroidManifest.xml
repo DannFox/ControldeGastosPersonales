@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".AccountsActivity" />
         <activity android:name=".PaymentsActivity" />
+
     </application>
 
 </manifest>
