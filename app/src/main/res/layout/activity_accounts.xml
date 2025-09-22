@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
    <LinearLayout
        android:layout_width="match_parent"
@@ -19,11 +21,18 @@
            android:textStyle="bold"
            android:layout_marginBottom="8dp" />
 
-       <androidx.recyclerview.widget.RecyclerView
+       <ScrollView
            android:layout_width="match_parent"
            android:layout_height="0dp"
-           android:id="@+id/rvAccounts"
-           android:layout_weight="1" />
+           android:layout_weight="1" >
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="vertical">
+               <include layout="@layout/list_item_account"/>
+               <include layout="@layout/list_item_account_2"/>
+           </LinearLayout>
+       </ScrollView>
 
        <Button
            android:layout_width="match_parent"
