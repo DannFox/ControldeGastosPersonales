@@ -12,7 +12,6 @@ class PaymentsActivity : AppCompatActivity() {
 
         val bottomNavView = findViewById<BottomNavigationView>(R.id.bottomNav)
 
-        // Marcar "Pagos" como seleccionado
         bottomNavView.selectedItemId = R.id.nav_payments
 
         bottomNavView.setOnItemSelectedListener { item ->
@@ -21,19 +20,18 @@ class PaymentsActivity : AppCompatActivity() {
                     val intent = Intent(this, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                     startActivity(intent)
-                    finish() // Termina PaymentsActivity al ir a Home
+                    finish()
                     true
                 }
 
                 R.id.nav_accounts -> {
                     val intent = Intent(this, AccountsActivity::class.java)
                     startActivity(intent)
-                    finish() // Termina PaymentsActivity al ir a Accounts
+                    finish()
                     true
                 }
 
                 R.id.nav_payments -> {
-                    // Ya estás aquí
                     true
                 }
 

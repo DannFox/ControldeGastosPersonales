@@ -124,9 +124,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- RecyclerView para la lista de gastos recientes -->
-    <!-- Placeholder para diseño -->
-
     <!-- Contenedor de la Navegación Inferior -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvGastosRecientes"

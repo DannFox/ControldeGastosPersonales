@@ -9,7 +9,7 @@
     android:padding="16dp"
     android:layout_marginBottom="8dp"
     android:background="@drawable/account_item_background_default"
-    tools:backgroundTint="#E0E0E0"> <!-- Color de fondo por defecto para preview, se sobrescribirá -->
+    tools:backgroundTint="#E0E0E0">
 
     <!-- Símbolo/Icono de la cuenta -->
     <ImageView
@@ -19,7 +19,7 @@
         android:layout_marginEnd="16dp"
         android:layout_gravity="center_vertical"
         app:tint="?attr/colorOnSurfaceVariant"
-        tools:srcCompat="@drawable/baseline_account_balance_24" /> <!-- Icono por defecto para preview -->
+        tools:srcCompat="@drawable/baseline_account_balance_24" />
 
     <!-- Contenedor para Nombre y Monto -->
     <LinearLayout
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceTitleMedium"
             android:textStyle="bold"
-            tools:text="Banco Principal" /> <!-- Ejemplo para preview -->
+            tools:text="Banco Principal" />
 
         <TextView
             android:id="@+id/tvAccountBalance"
@@ -43,15 +43,6 @@
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceBodyMedium"
             android:textColor="?attr/colorPrimary"
-            tools:text="$1,250.75 USD" /> <!-- Ejemplo para preview -->
+            tools:text="$1,250.75 USD" />
     </LinearLayout>
-
-    <!-- Indicador de color (opcional, otra forma de mostrar el color si no es el fondo) -->
-    <!-- <View
-        android:id="@+id/viewAccountColorIndicator"
-        android:layout_width="10dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
-        tools:background="#4CAF50" /> -->
-
 </LinearLayout>

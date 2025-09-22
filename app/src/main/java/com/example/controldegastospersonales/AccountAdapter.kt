@@ -1,4 +1,4 @@
-// AccountAdapter.kt
+
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -31,29 +31,21 @@ class AccountAdapter(private val accounts: List<Account>) :
         val account = accounts[position]
 
         holder.accountName.text = account.name
-        holder.accountBalance.text = "${account.balance} ${account.currency}" // Formatea como necesites
+        holder.accountBalance.text = "${account.balance} ${account.currency}"
         holder.accountSymbol.setImageResource(account.symbolResId)
 
         // Aplicar el color de fondo
         try {
             val color = Color.parseColor(account.colorHex)
-            // Para cambiar el fondo del LinearLayout
             holder.accountItemContainer.background?.let { background ->
-                val wrappedDrawable = DrawableCompat.wrap(background.mutate()) // mutate() es importante
+                val wrappedDrawable = DrawableCompat.wrap(background.mutate())
                 DrawableCompat.setTint(wrappedDrawable, color)
                 holder.accountItemContainer.background = wrappedDrawable
             }
         } catch (e: IllegalArgumentException) {
-            // Manejar color inválido, tal vez usar un color por defecto
-            // Por ejemplo, puedes tener un color por defecto en el XML y solo aplicar tinte si es válido
         }
 
-        // Si quieres cambiar el tinte del icono en lugar del fondo del ítem:
-        // holder.accountSymbol.setColorFilter(Color.parseColor(account.colorHex), PorterDuff.Mode.SRC_IN)
-
-        // Listener de clic (opcional)
         holder.itemView.setOnClickListener {
-            // Acción al hacer clic en un ítem
         }
     }
 
