@@ -29,17 +29,20 @@ class MainActivity : AppCompatActivity() {
                 true }
                 R.id.nav_accounts -> {
                 val intent = Intent(this, AccountsActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                 startActivity(intent)
                 true
                 }
                 R.id.nav_payments -> {
                 val intent = Intent(this, PaymentsActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                 startActivity(intent)
                 true
                 }
                 else -> false
             }
         }
+        bottomNavView.selectedItemId = R.id.nav_dashboard
 
         rvGastosRecientes = findViewById(R.id.rvGastosRecientes)
 

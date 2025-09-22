@@ -24,17 +24,22 @@ class PaymentsActivity : AppCompatActivity() {
                     finish() // Termina PaymentsActivity al ir a Home
                     true
                 }
+
                 R.id.nav_accounts -> {
                     val intent = Intent(this, AccountsActivity::class.java)
                     startActivity(intent)
                     finish() // Termina PaymentsActivity al ir a Accounts
                     true
                 }
+
                 R.id.nav_payments -> {
                     // Ya estás aquí
                     true
                 }
+
                 else -> false
             }
-        }    }
+        }
+        bottomNavView.selectedItemId = R.id.nav_payments
+    }
 }

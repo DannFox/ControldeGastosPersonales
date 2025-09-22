@@ -21,18 +21,11 @@
            android:textStyle="bold"
            android:layout_marginBottom="8dp" />
 
-       <ScrollView
+       <androidx.recyclerview.widget.RecyclerView
+           android:id="@+id/rvAccounts"
            android:layout_width="match_parent"
            android:layout_height="0dp"
-           android:layout_weight="1" >
-           <LinearLayout
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:orientation="vertical">
-               <include layout="@layout/list_item_account"/>
-               <include layout="@layout/list_item_account_2"/>
-           </LinearLayout>
-       </ScrollView>
+           android:layout_weight="1" />
 
        <Button
            android:layout_width="match_parent"
