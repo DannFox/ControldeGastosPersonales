@@ -93,11 +93,10 @@
     </LinearLayout>
 
     <!-- Gráfico -->
-    <ImageView
+    <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/ivGrafico"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/graficotortabasico1"
         android:contentDescription="Gráfico de distribución de gastos"
         android:scaleType="fitCenter"
         android:layout_marginTop="16dp"
