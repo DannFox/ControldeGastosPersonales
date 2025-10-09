@@ -55,20 +55,20 @@ namespace APIGastosPersonales.Data
 
                 entity.HasData(
                     //Categorias de gastos
-                    new Categoria { Id_categoria = 1, Nombre = "Alimentacion", Tipo = "Gasto" },
-                    new Categoria { Id_categoria = 2, Nombre = "Transporte", Tipo = "Gasto" },
-                    new Categoria { Id_categoria = 3, Nombre = "Entretenimiento", Tipo = "Gasto" },
-                    new Categoria { Id_categoria = 4, Nombre = "Educación", Tipo = "Gasto" },
-                    new Categoria { Id_categoria = 5, Nombre = "Salud", Tipo = "Gasto" },
-                    new Categoria { Id_categoria = 6, Nombre = "Otros", Tipo = "Gasto" },
+                    new Categoria { Id_categoria = 1, Nombre = "Alimentacion", Tipo = "Gasto", EsPredefinida = true },
+                    new Categoria { Id_categoria = 2, Nombre = "Transporte", Tipo = "Gasto", EsPredefinida = true },
+                    new Categoria { Id_categoria = 3, Nombre = "Entretenimiento", Tipo = "Gasto", EsPredefinida = true },
+                    new Categoria { Id_categoria = 4, Nombre = "Educación", Tipo = "Gasto", EsPredefinida = true },
+                    new Categoria { Id_categoria = 5, Nombre = "Salud", Tipo = "Gasto", EsPredefinida = true },
+                    new Categoria { Id_categoria = 6, Nombre = "Otros", Tipo = "Gasto", EsPredefinida = true },
 
                     //Categorias de Ingreso
-                    new Categoria { Id_categoria = 7, Nombre = "Salario", Tipo = "Ingreso" },
-                    new Categoria { Id_categoria = 8, Nombre = "Venta", Tipo = "Ingreso" },
-                    new Categoria { Id_categoria = 9, Nombre = "Intereses", Tipo = "Ingreso" },
-                    new Categoria { Id_categoria = 10, Nombre = "Regalo", Tipo = "Ingreso" },
-                    new Categoria { Id_categoria = 11, Nombre = "Reembolso", Tipo = "Ingreso" },
-                    new Categoria { Id_categoria = 12, Nombre = "Otros", Tipo = "Ingreso" }
+                    new Categoria { Id_categoria = 7, Nombre = "Salario", Tipo = "Ingreso", EsPredefinida = true },
+                    new Categoria { Id_categoria = 8, Nombre = "Venta", Tipo = "Ingreso", EsPredefinida = true },
+                    new Categoria { Id_categoria = 9, Nombre = "Intereses", Tipo = "Ingreso", EsPredefinida = true },
+                    new Categoria { Id_categoria = 10, Nombre = "Regalo", Tipo = "Ingreso", EsPredefinida = true },
+                    new Categoria { Id_categoria = 11, Nombre = "Reembolso", Tipo = "Ingreso", EsPredefinida = true },
+                    new Categoria { Id_categoria = 12, Nombre = "Otros", Tipo = "Ingreso", EsPredefinida = true }
                     );
             });
 

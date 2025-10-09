@@ -14,6 +14,7 @@ namespace APIGastosPersonales.Models
         [Required(ErrorMessage = "Debe indicar el tipo de categoría.")]
         [MaxLength(10)]
         public string Tipo { get; set; } = string.Empty; // "Gasto" o "Ingreso"
+        public bool EsPredefinida {  get; set; } = false;
 
         // Relaciones
         public ICollection<Gasto> Gastos { get; set; } = new List<Gasto>();
