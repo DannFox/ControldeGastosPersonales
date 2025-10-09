@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APIGastosPersonales.Models
 {
-    public class Gasto
+    public class Ingreso
     {
         [Key]
-        public int Id_gasto { get; set; }
+        public int Id_ingreso { get; set; }
         [Required(ErrorMessage = "El monto es obligatorio")]
         [Column(TypeName = "decimal(18,2)")]
         [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser mayor que cero")]
@@ -16,7 +16,7 @@ namespace APIGastosPersonales.Models
         [Required]
         public DateTime Fecha { get; set; } = DateTime.Now;
 
-        //Relaciones
+      //Relaciones
         public int CuentaId { get; set; }
         public Cuenta? Cuenta { get; set; }
 

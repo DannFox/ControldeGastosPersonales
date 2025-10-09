@@ -17,5 +17,6 @@ namespace APIGastosPersonales.Models
         public decimal SaldoActual { get; set; } = 0;
 
         public ICollection<Gasto> Gastos { get; set; } = new List<Gasto>();
+        public ICollection<Ingreso> Ingresos { get; set; } = new List<Ingreso>();
     }
 }
