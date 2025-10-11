@@ -1,5 +1,5 @@
+package com.example.controldegastospersonales
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,11 +8,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.controldegastospersonales.Account
-import com.example.controldegastospersonales.R
+import java.text.NumberFormat
+import java.util.Locale
 
-class AccountAdapter(private val accounts: List<Account>) :
-    RecyclerView.Adapter<AccountAdapter.AccountViewHolder>() {
+class CuentaAdapter(private val accounts: List<Cuenta>) :
+    RecyclerView.Adapter<CuentaAdapter.AccountViewHolder>() {
 
     class AccountViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val accountItemContainer: LinearLayout = itemView.findViewById(R.id.llAccountItemContainer)
@@ -28,24 +28,25 @@ class AccountAdapter(private val accounts: List<Account>) :
     }
 
     override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
-        val account = accounts[position]
+        val cuenta = accounts[position]
 
-        holder.accountName.text = account.name
-        holder.accountBalance.text = "${account.balance} ${account.currency}"
-        holder.accountSymbol.setImageResource(account.symbolResId)
+        holder.accountName.text = cuenta.Nombre
 
-        // Aplicar el color de fondo
-        try {
-            val color = Color.parseColor(account.colorHex)
-            holder.accountItemContainer.background?.let { background ->
-                val wrappedDrawable = DrawableCompat.wrap(background.mutate())
-                DrawableCompat.setTint(wrappedDrawable, color)
-                holder.accountItemContainer.background = wrappedDrawable
-            }
-        } catch (e: IllegalArgumentException) {
+        val format = NumberFormat.getCurrencyInstance(Locale("es", "MX"))
+        holder.accountBalance.text = format.format(cuenta.SaldoActual)
+        
+        // Use a default icon
+        holder.accountSymbol.setImageResource(R.drawable.baseline_account_balance_24)
+
+        // Remove color logic since it's not in Cuenta model
+        holder.accountItemContainer.background?.let { background ->
+            val wrappedDrawable = DrawableCompat.wrap(background.mutate())
+            DrawableCompat.setTintList(wrappedDrawable, null)
+            holder.accountItemContainer.background = wrappedDrawable
         }
 
         holder.itemView.setOnClickListener {
+            // Handle click if necessary
         }
     }
 

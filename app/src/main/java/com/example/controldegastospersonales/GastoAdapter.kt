@@ -28,22 +28,16 @@ class GastoAdapter(private val gastos: List<Gasto>) :
     override fun onBindViewHolder(holder: GastoViewHolder, position: Int) {
         val gasto = gastos[position]
 
-        holder.nombreGasto.text = gasto.nombre
-        holder.fechaGasto.text = gasto.fecha
+        holder.nombreGasto.text = gasto.Descripcion
+        holder.fechaGasto.text = gasto.Fecha
 
         val format = NumberFormat.getCurrencyInstance(Locale.US)
 
 
-        holder.montoGasto.text = format.format(gasto.monto * -1)
-        if (gasto.iconoCategoriaResId != null) {
-            holder.iconoGasto.setImageResource(gasto.iconoCategoriaResId)
-            holder.iconoGasto.visibility = View.VISIBLE
-        } else {
-            holder.iconoGasto.visibility = View.GONE
-        }
+        holder.montoGasto.text = format.format(gasto.Monto * -1)
+        holder.iconoGasto.setImageResource(R.drawable.ic_category_placeholder)
 
     }
 
     override fun getItemCount() = gastos.size
 }
-

@@ -1,7 +1,7 @@
 package com.example.controldegastospersonales
 
-class Gasto(
-    val Id_gasto: Int,
+class Ingreso(
+    val Id_ingreso: Int,
     val Monto: Double,
     val Descripcion: String,
     val Fecha: String,

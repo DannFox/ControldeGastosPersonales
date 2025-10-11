@@ -27,11 +27,21 @@
            android:layout_height="0dp"
            android:layout_weight="1" />
 
+       <TextView
+           android:id="@+id/empty_view"
+           android:layout_width="match_parent"
+           android:layout_height="0dp"
+           android:layout_weight="1"
+           android:gravity="center"
+           android:visibility="gone"
+           android:text="No tienes cuentas registradas."
+           android:textSize="16sp"/>
+
        <Button
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:text="Agregar Cuenta/Tarjeta"
-           android:id="@+id/btnAddAccount" />
+           android:id="@+id/btnAddAccount"
+           android:text="Agregar Cuenta/Tarjeta" />
 
    </LinearLayout>
 
@@ -44,7 +54,4 @@
         <include layout="@layout/reusable_bottom_navigation" />
     </FrameLayout>
 
-
 </RelativeLayout>
-
-

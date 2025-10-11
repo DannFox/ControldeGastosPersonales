@@ -9,6 +9,10 @@
         android:icon="@drawable/baseline_account_balance_24"
         android:title="Cuentas" />
     <item
+        android:id="@+id/nav_transactions"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title="Transacciones" />
+    <item
         android:id="@+id/nav_payments"
         android:icon="@drawable/baseline_calendar_today_24"
         android:title="Pagos" />

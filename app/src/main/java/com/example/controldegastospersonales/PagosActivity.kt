@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class PaymentsActivity : AppCompatActivity() {
+class PagosActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payments)
@@ -14,20 +14,26 @@ class PaymentsActivity : AppCompatActivity() {
 
         bottomNavView.selectedItemId = R.id.nav_payments
 
-        bottomNavView.setOnItemSelectedListener { item ->
+        bottomNavView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_dashboard -> {
                     val intent = Intent(this, MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                     startActivity(intent)
-                    finish()
                     true
                 }
 
                 R.id.nav_accounts -> {
-                    val intent = Intent(this, AccountsActivity::class.java)
+                    val intent = Intent(this, CuentasActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                     startActivity(intent)
-                    finish()
+                    true
+                }
+
+                R.id.nav_transactions -> {
+                    val intent = Intent(this, TransaccionesActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                    startActivity(intent)
                     true
                 }
 
@@ -38,6 +44,5 @@ class PaymentsActivity : AppCompatActivity() {
                 else -> false
             }
         }
-        bottomNavView.selectedItemId = R.id.nav_payments
     }
 }
