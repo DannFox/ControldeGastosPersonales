@@ -1,10 +1,15 @@
 package com.example.controldegastospersonales
 
-class Ingreso(
-    val Id_ingreso: Int,
-    val Monto: Double,
-    val Descripcion: String,
-    val Fecha: String,
-    val CuentaId: Int,
-    val CategoriaId: Int
+import com.google.gson.annotations.SerializedName
+
+data class Ingreso(
+    @SerializedName("id_ingreso")
+    val idIngreso: Int,
+    val monto: Double,
+    val descripcion: String,
+    val fecha: String,
+    val cuentaId: Int,
+    val cuenta: Cuenta,
+    val categoriaId: Int,
+    val categoria: String?
 )

@@ -3,24 +3,25 @@ package com.example.controldegastospersonales
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.controldegastospersonales.API.APIClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.NumberFormat
-import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     private lateinit var rvGastosRecientes: RecyclerView
     private lateinit var gastoAdapter: GastoAdapter
     private var listaDeGastos: MutableList<Gasto> = mutableListOf()
-    private var listaDeIngresos: MutableList<Ingreso> = mutableListOf()
-    private lateinit var tvNoGastos: TextView
+    private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var tvBalanceTotal: TextView
     private lateinit var tvTotalGastos: TextView
 
@@ -28,34 +29,30 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        tvNoGastos = findViewById(R.id.tvNoGastos)
         tvBalanceTotal = findViewById(R.id.tvBalanceTotal)
         tvTotalGastos = findViewById(R.id.tvTotalGastos)
-        val bottomNavView = findViewById<BottomNavigationView>(R.id.bottomNav)
 
-        bottomNavView.selectedItemId = R.id.nav_dashboard
+        bottomNavigationView = findViewById(R.id.bottomNav)
+        bottomNavigationView.selectedItemId = R.id.navigation_home
 
-        bottomNavView.setOnNavigationItemSelectedListener { item ->
+        bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_dashboard -> {
+                R.id.navigation_home -> {
                     true
                 }
-                R.id.nav_accounts -> {
-                    val intent = Intent(this, CuentasActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                    startActivity(intent)
+                R.id.navigation_accounts -> {
+                    startActivity(Intent(this, AccountsActivity::class.java))
+                    overridePendingTransition(0, 0)
                     true
                 }
-                R.id.nav_transactions -> {
-                    val intent = Intent(this, TransaccionesActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                    startActivity(intent)
+                R.id.navigation_categories -> {
+                    startActivity(Intent(this, CategoriesActivity::class.java))
+                    overridePendingTransition(0, 0)
                     true
                 }
-                R.id.nav_payments -> {
-                    val intent = Intent(this, PagosActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                    startActivity(intent)
+                R.id.navigation_payments -> {
+                    startActivity(Intent(this, PaymentsActivity::class.java))
+                    overridePendingTransition(0, 0)
                     true
                 }
                 else -> false
@@ -70,76 +67,44 @@ class MainActivity : AppCompatActivity() {
         loadDashboardData()
     }
 
-    private fun formatCurrency(amount: Double): String {
-        val format = NumberFormat.getCurrencyInstance(Locale("es", "MX"))
-        return format.format(amount)
-    }
-
     private fun loadDashboardData() {
-        val apiService = ApiClient.instance.create(ApiService::class.java)
-        val gastosCall = apiService.getGastos()
-        val ingresosCall = apiService.getIngresos()
-        var finishedCalls = 0
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val accountsResponse = APIClient.instance.getCuentas().execute()
+                val gastosResponse = APIClient.instance.getGastos().execute()
 
-        val onDataLoaded = { ->
-            finishedCalls++
-            if (finishedCalls == 2) {
-                // Update Gastos Recientes RecyclerView
-                gastoAdapter.notifyDataSetChanged()
-                if (listaDeGastos.isEmpty()) {
-                    tvNoGastos.visibility = View.VISIBLE
-                    rvGastosRecientes.visibility = View.GONE
-                } else {
-                    tvNoGastos.visibility = View.GONE
-                    rvGastosRecientes.visibility = View.VISIBLE
+                withContext(Dispatchers.Main) {
+                    if (accountsResponse.isSuccessful) {
+                        val cuentas = accountsResponse.body() ?: emptyList()
+                        val totalBalance = cuentas.sumOf { it.saldoActual }
+                        tvBalanceTotal.text = String.format("$%,.2f", totalBalance)
+                    } else {
+                        Log.e("MainActivity", "Error al obtener cuentas: ${accountsResponse.errorBody()?.string()}")
+                    }
+
+                    if (gastosResponse.isSuccessful) {
+                        val gastos = gastosResponse.body() ?: emptyList()
+                        val totalGastos = gastos.sumOf { it.monto }
+                        tvTotalGastos.text = String.format("$%,.2f", totalGastos)
+                        
+                        listaDeGastos.clear()
+                        listaDeGastos.addAll(gastos)
+                        gastoAdapter.notifyDataSetChanged()
+                    } else {
+                        Log.e("MainActivity", "Error al obtener gastos: ${gastosResponse.errorBody()?.string()}")
+                    }
                 }
-
-                // Calculate and set totals
-                val totalGastos = listaDeGastos.sumOf { it.Monto }
-                val totalIngresos = listaDeIngresos.sumOf { it.Monto }
-                val balanceTotal = totalIngresos - totalGastos
-
-                tvTotalGastos.text = formatCurrency(totalGastos)
-                tvBalanceTotal.text = formatCurrency(balanceTotal)
+            } catch (t: Throwable) {
+                withContext(Dispatchers.Main) {
+                    Log.e("MainActivity", "Fallo en la llamada a la API", t)
+                }
             }
         }
+    }
 
-        gastosCall.enqueue(object : Callback<List<Gasto>> {
-            override fun onResponse(call: Call<List<Gasto>>, response: Response<List<Gasto>>) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        listaDeGastos.clear()
-                        listaDeGastos.addAll(it)
-                    }
-                } else {
-                    Log.e("API Error", "Error fetching gastos: ${response.code()}")
-                }
-                onDataLoaded()
-            }
-
-            override fun onFailure(call: Call<List<Gasto>>, t: Throwable) {
-                Log.e("API Failure", "Error fetching gastos: ${t.message}", t)
-                onDataLoaded()
-            }
-        })
-
-        ingresosCall.enqueue(object : Callback<List<Ingreso>> {
-            override fun onResponse(call: Call<List<Ingreso>>, response: Response<List<Ingreso>>) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        listaDeIngresos.clear()
-                        listaDeIngresos.addAll(it)
-                    }
-                } else {
-                    Log.e("API Error", "Error fetching ingresos: ${response.code()}")
-                }
-                onDataLoaded()
-            }
-
-            override fun onFailure(call: Call<List<Ingreso>>, t: Throwable) {
-                Log.e("API Failure", "Error fetching ingresos: ${t.message}", t)
-                onDataLoaded()
-            }
-        })
+    override fun onResume() {
+        super.onResume()
+        loadDashboardData()
+        bottomNavigationView.selectedItemId = R.id.navigation_home
     }
 }

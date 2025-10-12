@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_dashboard"
-        android:icon="@drawable/baseline_home_24"
-        android:title="Dashboard" />
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/title_home" />
     <item
-        android:id="@+id/nav_accounts"
-        android:icon="@drawable/baseline_account_balance_24"
-        android:title="Cuentas" />
+        android:id="@+id/navigation_accounts"
+        android:icon="@drawable/ic_accounts"
+        android:title="@string/title_accounts" />
     <item
-        android:id="@+id/nav_transactions"
-        android:icon="@android:drawable/ic_menu_sort_by_size"
-        android:title="Transacciones" />
+        android:id="@+id/navigation_payments"
+        android:icon="@drawable/ic_payment"
+        android:title="@string/title_payments" />
     <item
-        android:id="@+id/nav_payments"
-        android:icon="@drawable/baseline_calendar_today_24"
-        android:title="Pagos" />
+        android:id="@+id/navigation_categories"
+        android:icon="@drawable/ic_category"
+        android:title="@string/title_categories" />
 </menu>

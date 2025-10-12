@@ -3,52 +3,32 @@ package com.example.controldegastospersonales
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
-import java.text.NumberFormat
-import java.util.Locale
 
-class CuentaAdapter(private val accounts: List<Cuenta>) :
-    RecyclerView.Adapter<CuentaAdapter.AccountViewHolder>() {
+class CuentaAdapter(private val cuentas: List<Cuenta>) : RecyclerView.Adapter<CuentaAdapter.ViewHolder>() {
 
-    class AccountViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val accountItemContainer: LinearLayout = itemView.findViewById(R.id.llAccountItemContainer)
-        val accountSymbol: ImageView = itemView.findViewById(R.id.ivAccountSymbol)
-        val accountName: TextView = itemView.findViewById(R.id.tvAccountName)
-        val accountBalance: TextView = itemView.findViewById(R.id.tvAccountBalance)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_cuenta, parent, false)
+        return ViewHolder(view)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_item_account, parent, false)
-        return AccountViewHolder(view)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val cuenta = cuentas[position]
+        holder.bind(cuenta)
     }
 
-    override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
-        val cuenta = accounts[position]
+    override fun getItemCount(): Int {
+        return cuentas.size
+    }
 
-        holder.accountName.text = cuenta.Nombre
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val nombreCuentaTextView: TextView = itemView.findViewById(R.id.nombre_cuenta_text_view)
+        private val saldoCuentaTextView: TextView = itemView.findViewById(R.id.saldo_cuenta_text_view)
 
-        val format = NumberFormat.getCurrencyInstance(Locale("es", "MX"))
-        holder.accountBalance.text = format.format(cuenta.SaldoActual)
-        
-        // Use a default icon
-        holder.accountSymbol.setImageResource(R.drawable.baseline_account_balance_24)
-
-        // Remove color logic since it's not in Cuenta model
-        holder.accountItemContainer.background?.let { background ->
-            val wrappedDrawable = DrawableCompat.wrap(background.mutate())
-            DrawableCompat.setTintList(wrappedDrawable, null)
-            holder.accountItemContainer.background = wrappedDrawable
-        }
-
-        holder.itemView.setOnClickListener {
-            // Handle click if necessary
+        fun bind(cuenta: Cuenta) {
+            nombreCuentaTextView.text = cuenta.nombre
+            saldoCuentaTextView.text = String.format("$%.2f", cuenta.saldoActual)
         }
     }
-
-    override fun getItemCount() = accounts.size
 }

@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">ControldeGastosPersonales</string>
+    <string name="app_name">Control de Gastos Personales</string>
+    <string name="agregar_cuenta">Agregar Cuenta</string>
+    <string name="agregar_categoria">Agregar Categoria</string>
+    <string name="title_home">Home</string>
+    <string name="title_accounts">Accounts</string>
+    <string name="title_payments">Payments</string>
+    <string name="title_categories">Categories</string>
 </resources>

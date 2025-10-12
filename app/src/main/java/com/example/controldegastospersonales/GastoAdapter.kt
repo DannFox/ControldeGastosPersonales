@@ -28,14 +28,18 @@ class GastoAdapter(private val gastos: List<Gasto>) :
     override fun onBindViewHolder(holder: GastoViewHolder, position: Int) {
         val gasto = gastos[position]
 
-        holder.nombreGasto.text = gasto.Descripcion
-        holder.fechaGasto.text = gasto.Fecha
+        holder.nombreGasto.text = gasto.descripcion
+        holder.fechaGasto.text = gasto.fecha
 
         val format = NumberFormat.getCurrencyInstance(Locale.US)
 
 
-        holder.montoGasto.text = format.format(gasto.Monto * -1)
-        holder.iconoGasto.setImageResource(R.drawable.ic_category_placeholder)
+        holder.montoGasto.text = format.format(gasto.monto * -1)
+        
+        // La propiedad 'iconoCategoriaResId' ya no existe en la clase Gasto.
+        // Se debe implementar una nueva lógica para mostrar el icono de la categoría.
+        // Por ahora, el icono se oculta.
+        holder.iconoGasto.visibility = View.GONE
 
     }
 
