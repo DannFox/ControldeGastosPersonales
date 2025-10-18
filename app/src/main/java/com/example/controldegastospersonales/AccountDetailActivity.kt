@@ -2,6 +2,7 @@ package com.example.controldegastospersonales
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -22,7 +23,7 @@ import retrofit2.Response
 
 class AccountDetailActivity : AppCompatActivity() {
 
-    private lateinit var cuenta: Cuenta
+    private var cuenta: Cuenta? = null
     private lateinit var tvAccountName: TextView
     private lateinit var tvAccountBalance: TextView
     private lateinit var btnEdit: ImageButton
@@ -38,7 +39,12 @@ class AccountDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account_detail)
 
-        cuenta = intent.getSerializableExtra("cuenta") as Cuenta
+        cuenta = intent.getSerializableExtra("cuenta") as? Cuenta
+
+        if (cuenta == null) {
+            finish()
+            return
+        }
 
         tvAccountName = findViewById(R.id.tvAccountNameDetail)
         tvAccountBalance = findViewById(R.id.tvAccountBalanceDetail)
@@ -49,13 +55,8 @@ class AccountDetailActivity : AppCompatActivity() {
         llEmptyIngresos = findViewById(R.id.llEmptyIngresos)
         llEmptyGastos = findViewById(R.id.llEmptyGastos)
 
-        tvAccountName.text = cuenta.nombre
-        tvAccountBalance.text = String.format("$%,.2f", cuenta.saldoActual)
-
         rvIngresos.layoutManager = LinearLayoutManager(this)
         rvGastos.layoutManager = LinearLayoutManager(this)
-
-        loadIngresosAndGastos()
 
         btnEdit.setOnClickListener {
             val intent = Intent(this, EditAccountActivity::class.java).apply {
@@ -69,60 +70,71 @@ class AccountDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadIngresosAndGastos() {
+    private fun loadAccountDetails() {
+        val currentCuenta = cuenta ?: return
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                // Fetch the specific account to get the most up-to-date info
+                val cuentaResponse = APIClient.instance.getCuenta(currentCuenta.idCuenta).execute()
+                // Fetch ALL incomes and expenses
                 val ingresosResponse = APIClient.instance.getIngresos().execute()
                 val gastosResponse = APIClient.instance.getGastos().execute()
 
                 withContext(Dispatchers.Main) {
-                    if (ingresosResponse.isSuccessful) {
-                        val allIngresos = ingresosResponse.body() ?: emptyList()
-                        val filteredIngresos = allIngresos.filter { it.cuentaId == cuenta.idCuenta }
+                    if (cuentaResponse.isSuccessful) {
+                        val fetchedCuenta = cuentaResponse.body()!!
+                        cuenta = fetchedCuenta // Update the local cuenta object
+                        tvAccountName.text = fetchedCuenta.nombre
+
+                        // Incomes
+                        val allIngresos = if (ingresosResponse.isSuccessful) ingresosResponse.body() ?: emptyList() else emptyList()
+                        val filteredIngresos = allIngresos.filter { it.cuentaId == currentCuenta.idCuenta }
                         ingresoAdapter = IngresoAdapter(filteredIngresos)
                         rvIngresos.adapter = ingresoAdapter
-                        
-                        if (filteredIngresos.isEmpty()) {
-                            rvIngresos.visibility = View.GONE
-                            llEmptyIngresos.visibility = View.VISIBLE
-                        } else {
-                            rvIngresos.visibility = View.VISIBLE
-                            llEmptyIngresos.visibility = View.GONE
-                        }
-                    }
+                        llEmptyIngresos.visibility = if (filteredIngresos.isEmpty()) View.VISIBLE else View.GONE
+                        rvIngresos.visibility = if (filteredIngresos.isEmpty()) View.GONE else View.VISIBLE
 
-                    if (gastosResponse.isSuccessful) {
-                        val allGastos = gastosResponse.body() ?: emptyList()
-                        val filteredGastos = allGastos.filter { it.cuentaId == cuenta.idCuenta }
+                        // Expenses
+                        val allGastos = if (gastosResponse.isSuccessful) gastosResponse.body() ?: emptyList() else emptyList()
+                        val filteredGastos = allGastos.filter { it.cuentaId == currentCuenta.idCuenta }
                         gastoAdapter = GastoAdapter(filteredGastos)
                         rvGastos.adapter = gastoAdapter
+                        llEmptyGastos.visibility = if (filteredGastos.isEmpty()) View.VISIBLE else View.GONE
+                        rvGastos.visibility = if (filteredGastos.isEmpty()) View.GONE else View.VISIBLE
 
-                        if (filteredGastos.isEmpty()) {
-                            rvGastos.visibility = View.GONE
-                            llEmptyGastos.visibility = View.VISIBLE
-                        } else {
-                            rvGastos.visibility = View.VISIBLE
-                            llEmptyGastos.visibility = View.GONE
-                        }
+                        // Calculate and set the final balance
+                        val totalIngresos = filteredIngresos.sumOf { it.monto }
+                        val totalGastos = filteredGastos.sumOf { it.monto }
+                        val saldoActual = fetchedCuenta.saldoInicial + totalIngresos - totalGastos
+                        tvAccountBalance.text = String.format("$%,.2f", saldoActual)
+
+                    } else {
+                        Toast.makeText(this@AccountDetailActivity, "Error al cargar los detalles de la cuenta", Toast.LENGTH_SHORT).show()
+                        finish()
                     }
                 }
             } catch (t: Throwable) {
-                // Handle error
+                Log.e("AccountDetailActivity", "Failed to load account details", t)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@AccountDetailActivity, "Fallo en la conexión", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
 
     private fun showDeleteConfirmationDialog() {
+        val currentCuenta = cuenta ?: return
         AlertDialog.Builder(this)
             .setTitle("Eliminar Cuenta")
             .setMessage("¿Estás seguro de que quieres eliminar esta cuenta? Esta acción no se puede deshacer.")
-            .setPositiveButton("Eliminar") { _, _ -> deleteAccount() }
+            .setPositiveButton("Eliminar") { _, _ -> deleteAccount(currentCuenta.idCuenta) }
             .setNegativeButton("Cancelar", null)
             .show()
     }
 
-    private fun deleteAccount() {
-        val call = APIClient.instance.deleteCuenta(cuenta.idCuenta)
+    private fun deleteAccount(idCuenta: Int) {
+        val call = APIClient.instance.deleteCuenta(idCuenta)
         call.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
@@ -141,25 +153,6 @@ class AccountDetailActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Refresh data if coming back from edit screen
-        val call = APIClient.instance.getCuentas()
-        call.enqueue(object : Callback<List<Cuenta>> {
-            override fun onResponse(call: Call<List<Cuenta>>, response: Response<List<Cuenta>>) {
-                if (response.isSuccessful) {
-                    val updatedCuentas = response.body() ?: emptyList()
-                    val updatedCuenta = updatedCuentas.find { it.idCuenta == cuenta.idCuenta }
-                    if (updatedCuenta != null) {
-                        cuenta = updatedCuenta
-                        tvAccountName.text = cuenta.nombre
-                        tvAccountBalance.text = String.format("$%,.2f", cuenta.saldoActual)
-                        loadIngresosAndGastos()
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<List<Cuenta>>, t: Throwable) {
-                // Handle error
-            }
-        })
+        loadAccountDetails()
     }
 }

@@ -1,5 +1,6 @@
 package com.example.controldegastospersonales
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -63,12 +64,17 @@ class AddIngresoActivity : AppCompatActivity() {
                         adapterCuentas.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                         spinnerIngresoCuenta.adapter = adapterCuentas
                     } else {
-                        Log.e("AddIngresoActivity", "Error al obtener cuentas: ${cuentasResponse.errorBody()?.string()}")
+                        Log.e(
+                            "AddIngresoActivity",
+                            "Error al obtener cuentas: ${cuentasResponse.errorBody()?.string()}"
+                        )
                     }
 
                     // Spinner de categorías
                     if (categoriasResponse.isSuccessful) {
-                        val categoriasIngreso = categoriasResponse.body()?.filter { it.tipo == "Ingreso" } ?: emptyList()
+                        val categoriasIngreso =
+                            categoriasResponse.body()?.filter { it.tipo == "Ingreso" }
+                                ?: emptyList()
                         listaDeCategorias.addAll(categoriasIngreso)
                         val adapterCategorias = ArrayAdapter(
                             this@AddIngresoActivity,
@@ -78,7 +84,12 @@ class AddIngresoActivity : AppCompatActivity() {
                         adapterCategorias.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                         spinnerIngresoCategoria.adapter = adapterCategorias
                     } else {
-                        Log.e("AddIngresoActivity", "Error al obtener categorías: ${categoriasResponse.errorBody()?.string()}")
+                        Log.e(
+                            "AddIngresoActivity",
+                            "Error al obtener categorías: ${
+                                categoriasResponse.errorBody()?.string()
+                            }"
+                        )
                     }
                 }
             } catch (t: Throwable) {
@@ -137,6 +148,7 @@ class AddIngresoActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
                         Toast.makeText(this@AddIngresoActivity, "Ingreso guardado correctamente", Toast.LENGTH_SHORT).show()
+                        setResult(Activity.RESULT_OK)
                         finish()
                     } else {
                         Toast.makeText(this@AddIngresoActivity, "Error al guardar el ingreso: ${response.message()}", Toast.LENGTH_LONG).show()

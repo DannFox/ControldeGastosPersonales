@@ -48,4 +48,13 @@ interface IAPIIService {
     //Metodo POST para los Ingresos
     @POST("Ingresos")
     fun insertIngreso(@Body ingreso: Ingreso): Call<Ingreso>
+
+    @GET("Cuentas/{id}")
+    fun getCuenta(@Path("id") id: Int): Call<Cuenta>
+
+    @GET("Ingresos/cuenta/{id}")
+    fun getIngresosByCuenta(@Path("id") id: Int): Call<List<Ingreso>>
+
+    @GET("Gastos/cuenta/{id}")
+    fun getGastosByCuenta(@Path("id") id: Int): Call<List<Gasto>>
 }

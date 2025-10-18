@@ -77,31 +77,24 @@ class AccountsActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val cuentasResponse = APIClient.instance.getCuentas().execute()
-                val categoriasResponse = APIClient.instance.getCategorias().execute()
+                val gastosResponse = APIClient.instance.getGastos().execute()
+                val ingresosResponse = APIClient.instance.getIngresos().execute()
 
                 withContext(Dispatchers.Main) {
-                    if (cuentasResponse.isSuccessful && categoriasResponse.isSuccessful) {
+                    if (cuentasResponse.isSuccessful) {
                         val cuentas = cuentasResponse.body() ?: emptyList()
-                        val categorias = categoriasResponse.body() ?: emptyList()
-                        val categoriasMap = categorias.associateBy { it.idCategoria }
+                        val gastos = if (gastosResponse.isSuccessful) gastosResponse.body() else emptyList()
+                        val ingresos = if (ingresosResponse.isSuccessful) ingresosResponse.body() else emptyList()
 
-                        val hydratedCuentas = cuentas.map { cuenta ->
-                            val hydratedGastos = cuenta.gastos.map { gasto ->
-                                gasto.copy(categoria = categoriasMap[gasto.categoriaId])
-                            }
-                            val hydratedIngresos = cuenta.ingresos.map { ingreso ->
-                                ingreso.copy(categoria = categoriasMap[ingreso.categoriaId])
-                            }
-
-                            val totalGastos = hydratedGastos.sumOf { it.monto }
-                            val totalIngresos = hydratedIngresos.sumOf { it.monto }
+                        val updatedCuentas = cuentas.map { cuenta ->
+                            val totalGastos = gastos?.filter { it.cuentaId == cuenta.idCuenta }?.sumOf { it.monto } ?: 0.0
+                            val totalIngresos = ingresos?.filter { it.cuentaId == cuenta.idCuenta }?.sumOf { it.monto } ?: 0.0
                             val saldoActual = cuenta.saldoInicial + totalIngresos - totalGastos
-
-                            cuenta.copy(gastos = hydratedGastos, ingresos = hydratedIngresos, saldoActual = saldoActual)
+                            cuenta.copy(saldoActual = saldoActual)
                         }
 
                         listaDeCuentas.clear()
-                        listaDeCuentas.addAll(hydratedCuentas)
+                        listaDeCuentas.addAll(updatedCuentas)
                         cuentaAdapter.notifyDataSetChanged()
 
                         if (listaDeCuentas.isEmpty()) {
@@ -126,6 +119,7 @@ class AccountsActivity : AppCompatActivity() {
             }
         }
     }
+
 
     override fun onResume() {
         super.onResume()
