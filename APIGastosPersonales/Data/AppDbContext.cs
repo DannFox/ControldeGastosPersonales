@@ -67,7 +67,6 @@ namespace APIGastosPersonales.Data
                     new Categoria { Id_categoria = 8, Nombre = "Venta", Tipo = "Ingreso", EsPredefinida = true },
                     new Categoria { Id_categoria = 9, Nombre = "Intereses", Tipo = "Ingreso", EsPredefinida = true },
                     new Categoria { Id_categoria = 10, Nombre = "Regalo", Tipo = "Ingreso", EsPredefinida = true },
-                    new Categoria { Id_categoria = 11, Nombre = "Reembolso", Tipo = "Ingreso", EsPredefinida = true },
                     new Categoria { Id_categoria = 12, Nombre = "Otros", Tipo = "Ingreso", EsPredefinida = true }
                     );
             });

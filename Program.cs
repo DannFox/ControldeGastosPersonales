@@ -5,12 +5,19 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers()
+    .AddJsonOptions(opts =>
+    {
+        // Evita la excepción por ciclos de referencia (omitirá propiedades que producirían ciclo).
+        opts.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-});
+        // Alternativa: usar Preserve si necesitas preservar referencias con $id/$ref
+        // opts.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+
+        // Si tu grafo es muy profundo, puedes incrementar MaxDepth
+        opts.JsonSerializerOptions.MaxDepth = 64;
+    });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
