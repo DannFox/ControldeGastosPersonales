@@ -1,5 +1,0 @@
-<!-- res/drawable/account_item_background_default.xml -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="?attr/colorSurfaceContainer"/> <!-- Un color base del tema -->
-    <corners android:radius="8dp"/>
-</shape>

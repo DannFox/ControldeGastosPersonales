@@ -9,7 +9,7 @@ data class Ingreso(
     val descripcion: String,
     val fecha: String,
     val cuentaId: Int,
-    val cuenta: Cuenta,
+    val cuenta: Cuenta?,
     val categoriaId: Int,
-    val categoria: String?
+    val categoria: Categoria?
 )

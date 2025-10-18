@@ -7,6 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import java.text.NumberFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 class GastoAdapter(private val gastos: List<Gasto>) :
@@ -29,7 +31,13 @@ class GastoAdapter(private val gastos: List<Gasto>) :
         val gasto = gastos[position]
 
         holder.nombreGasto.text = gasto.descripcion
-        holder.fechaGasto.text = gasto.fecha
+        try {
+            val outputFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale("es", "ES"))
+            val dateTime = LocalDateTime.parse(gasto.fecha)
+            holder.fechaGasto.text = dateTime.format(outputFormatter)
+        } catch (e: Exception) {
+            holder.fechaGasto.text = gasto.fecha // Fallback to original string if parsing fails
+        }
 
         val format = NumberFormat.getCurrencyInstance(Locale.US)
 

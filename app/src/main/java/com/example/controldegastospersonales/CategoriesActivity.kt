@@ -44,8 +44,8 @@ class CategoriesActivity : AppCompatActivity() {
                     overridePendingTransition(0,0)
                     true
                 }
-                R.id.navigation_payments -> {
-                    startActivity(Intent(this, PaymentsActivity::class.java))
+                R.id.navigation_movements -> {
+                    startActivity(Intent(this, MovementsActivity::class.java))
                     overridePendingTransition(0,0)
                     true
                 }

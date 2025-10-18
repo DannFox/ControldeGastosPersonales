@@ -21,9 +21,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AccountsActivity" />
-        <activity android:name=".PaymentsActivity" />
-        <activity android:name=".CategoriesActivity"/>
+        <activity android:name=".AccountsActivity" android:exported="false" />
+        <activity android:name=".MovementsActivity" android:exported="false" />
+        <activity android:name=".CategoriesActivity" android:exported="false"/>
+        <activity android:name=".AddAccountActivity" android:exported="false" />
+        <activity android:name=".EditAccountActivity" android:exported="false" />
+        <activity android:name=".AccountDetailActivity" android:exported="false" />
+        <activity android:name=".AddIngresoActivity" android:exported="false" />
+        <activity android:name=".AddGastoActivity" android:exported="false" />
 
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>

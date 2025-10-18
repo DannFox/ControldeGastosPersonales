@@ -29,7 +29,29 @@ class CategoriaAdapter(private val categorias: List<Categoria>) : RecyclerView.A
 
         fun bind(categoria: Categoria) {
             nombreTextView.text = categoria.nombre
-            iconImageView.setImageResource(R.drawable.ic_category_placeholder)
+
+            val iconRes = if (categoria.tipo == "Gasto") {
+                when (categoria.nombre) {
+                    "Alimentacion" -> R.drawable.ic_alimentacion
+                    "Transporte" -> R.drawable.ic_transporte
+                    "Entretenimiento" -> R.drawable.ic_entretenimiento
+                    "Salud" -> R.drawable.ic_salud
+                    "Educación" -> R.drawable.ic_educacion
+                    "Otros" -> R.drawable.ic_other
+                    else -> R.drawable.ic_category_placeholder
+                }
+            } else {
+                when (categoria.nombre) {
+                    "Salario" -> R.drawable.ic_salario
+                    "Venta" -> R.drawable.ic_venta
+                    "Intereses" -> R.drawable.ic_intereses
+                    "Regalo" -> R.drawable.ic_regalos
+                    "Otros" -> R.drawable.ic_other
+                    else -> R.drawable.ic_category_placeholder
+                }
+            }
+
+            iconImageView.setImageResource(iconRes)
         }
     }
 }

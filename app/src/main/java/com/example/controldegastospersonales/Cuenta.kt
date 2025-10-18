@@ -1,6 +1,7 @@
 package com.example.controldegastospersonales
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class Cuenta(
     @SerializedName("id_cuenta")
@@ -8,6 +9,6 @@ data class Cuenta(
     val nombre: String,
     val saldoInicial: Double,
     val saldoActual: Double,
-    val gastos: List<String>,
-    val ingresos: List<String>
-)
+    val gastos: List<Gasto>,
+    val ingresos: List<Ingreso>
+) : Serializable
