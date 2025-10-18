@@ -92,7 +92,12 @@ class AccountsActivity : AppCompatActivity() {
                             val hydratedIngresos = cuenta.ingresos.map { ingreso ->
                                 ingreso.copy(categoria = categoriasMap[ingreso.categoriaId])
                             }
-                            cuenta.copy(gastos = hydratedGastos, ingresos = hydratedIngresos)
+
+                            val totalGastos = hydratedGastos.sumOf { it.monto }
+                            val totalIngresos = hydratedIngresos.sumOf { it.monto }
+                            val saldoActual = cuenta.saldoInicial + totalIngresos - totalGastos
+
+                            cuenta.copy(gastos = hydratedGastos, ingresos = hydratedIngresos, saldoActual = saldoActual)
                         }
 
                         listaDeCuentas.clear()

@@ -1,6 +1,7 @@
 package com.example.controldegastospersonales
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class Ingreso(
     @SerializedName("id_ingreso")
@@ -12,4 +13,4 @@ data class Ingreso(
     val cuenta: Cuenta?,
     val categoriaId: Int,
     val categoria: Categoria?
-)
+) : Serializable
