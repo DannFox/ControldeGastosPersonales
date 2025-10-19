@@ -13,7 +13,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 class CategoriesActivity : AppCompatActivity() {
 
     private lateinit var bottomNavigationView: BottomNavigationView
-    private lateinit var addCategoriaFab: FloatingActionButton
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
     private lateinit var toolbar: Toolbar
@@ -24,11 +23,6 @@ class CategoriesActivity : AppCompatActivity() {
 
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
-        addCategoriaFab = findViewById(R.id.add_categoria_fab)
-        addCategoriaFab.setOnClickListener {
-            // TODO: Navigate to AddCategoryActivity
-        }
 
         bottomNavigationView = findViewById(R.id.bottom_navigation)
         bottomNavigationView.selectedItemId = R.id.navigation_categories
