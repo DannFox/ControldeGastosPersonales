@@ -1,58 +1,41 @@
-# Nombre del Proyecto
-
-Descripción breve — qué hace el programa y su propósito principal.
+# API Gastos Personales
 
 ## Descripción general
 
-Este repositorio contiene una aplicación dirigida a .NET 8. Está pensada para ejecutarse desde Visual Studio 2022 o con la CLI de .NET.
+Este repositorio contiene una solución desarrollada para `.NET 8`. Está pensada para abrirse y ejecutarse desde Visual Studio 2022 o con la CLI de .NET. La solución está organizada para separar responsabilidades (API, lógica de dominio, infraestructura y pruebas) y facilitar pruebas, mantenimiento y despliegue.
+
+## Solución (#solution)
+
+La solución agrupa uno o varios proyectos con responsabilidades claras. A continuación se explica la estructura típica y el rol de cada componente:
+
+- `API / Web`  
+  - Proyecto responsable de la exposición de la aplicación (por ejemplo, Web API o UI). Aquí se configuran controladores, rutas, middleware y la inyección de dependencias. Es el punto de entrada para peticiones HTTP.
+- `Dominio / Core`  
+  - Contiene entidades, reglas de negocio y contratos (interfaces). No debe depender de infraestructuras concretas; es el corazón de la aplicación.
+- `Infraestructura`  
+  - Implementaciones concretas de repositorios, acceso a datos (EF Core, Dapper, etc.), integración con servicios externos y adaptadores. Implementa los contratos definidos en `Dominio`.
+- `Aplicación / Services` (opcional)  
+  - Casos de uso, servicios de aplicación y orquestación entre dominio e infraestructura.
+- `Tests`  
+  - Proyecto(s) de pruebas unitarias e integración que validan la lógica de negocio y los puntos críticos.
+
+Arquitectura y principios aplicados:
+- Separación de responsabilidades (SoC) para facilitar pruebas y cambios.
+- Inyección de dependencias para sustituir implementaciones en pruebas.
+- Configuración por entorno mediante `appsettings.json` y variables de entorno.
+- Compatibilidad con contenedores mediante un `Dockerfile` en el proyecto de inicio (opcional).
 
 ## Requisitos
 
 - .NET SDK 8.x instalado (`dotnet --info` para verificar).  
-- Visual Studio 2022 (actualizado) o cualquier editor que soporte .NET 8.  
+- Visual Studio 2022 (actualizado) o cualquier editor que soporte `.NET 8`.  
 - Opcional: Docker (si desea crear y ejecutar contenedores).
 
 ## Inicio rápido (CLI)
 
+Desde la raíz de la solución:
+
 1. Restaurar dependencias:
 2. Compilar:
-3. Ejecutar (desde la raíz de la solución). Si hay varios proyectos, indique el proyecto de inicio:
+3. Ejecutar (si hay varios proyectos, indique el proyecto de inicio):
 4. Ejecutar pruebas:
-
-## Usando Visual Studio 2022
-
-1. Abra la solución (`*.sln`) en Visual Studio 2022.  
-2. En el Explorador de soluciones, seleccione el `Startup Project` deseado.  
-3. Build: `Build > Build Solution`. Ejecutar: `Debug > Start Debugging` (F5) o `Start Without Debugging` (Ctrl+F5).
-
-## Configuración
-
-- La configuración de la aplicación se maneja en `appsettings.json` y variantes por entorno como `appsettings.Development.json`.  
-- En producción, sobreescriba valores con variables de entorno.
-
-## Formato y analizadores
-
-- Formatear código con:
-- El proyecto puede incluir analizadores Roslyn y reglas de estilo; atienda los avisos para mantener consistencia.
-
-## Docker (opcional)
-
-Ejemplo básico para construir y ejecutar una imagen Docker (asumiendo un `Dockerfile` en el proyecto de inicio):
-
-## Contribuciones
-
-- Haga fork, cree una rama por característica, agregue cambios y pruebas, y abra un Pull Request.  
-- Mantenga commits enfocados y con descripciones claras.
-
-## Solución de problemas
-
-- Si hay errores de SDK/versiones: verifique `dotnet --info` y que el SDK 8 esté instalado.  
-- Para problemas con paquetes NuGet: ejecute `dotnet restore` y verifique las fuentes de NuGet en `nuget.config`.
-
-## Licencia
-
-Indique la licencia del repositorio (por ejemplo, `MIT`) y añada el archivo `LICENSE` correspondiente.
-
-## Contacto / Mantenedores
-
-Liste mantenedores o enlace al sistema de issues para reportar bugs o solicitar mejoras.
