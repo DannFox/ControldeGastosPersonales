@@ -36,17 +36,13 @@ class GastoAdapter(private val gastos: List<Gasto>) :
             val dateTime = LocalDateTime.parse(gasto.fecha)
             holder.fechaGasto.text = dateTime.format(outputFormatter)
         } catch (e: Exception) {
-            holder.fechaGasto.text = gasto.fecha // Fallback to original string if parsing fails
-        }
+            holder.fechaGasto.text = gasto.fecha
 
         val format = NumberFormat.getCurrencyInstance(Locale.US)
 
 
         holder.montoGasto.text = format.format(gasto.monto * -1)
-        
-        // La propiedad 'iconoCategoriaResId' ya no existe en la clase Gasto.
-        // Se debe implementar una nueva lógica para mostrar el icono de la categoría.
-        // Por ahora, el icono se oculta.
+
         holder.iconoGasto.visibility = View.GONE
 
     }
