@@ -37,6 +37,7 @@ class GastoAdapter(private val gastos: List<Gasto>) :
             holder.fechaGasto.text = dateTime.format(outputFormatter)
         } catch (e: Exception) {
             holder.fechaGasto.text = gasto.fecha
+        }
 
         val format = NumberFormat.getCurrencyInstance(Locale.US)
 
