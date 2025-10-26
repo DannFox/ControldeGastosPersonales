@@ -54,7 +54,6 @@ class IncomeCategoriesFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<Categoria>>, t: Throwable) {
-                // Handle failure
             }
         })
     }

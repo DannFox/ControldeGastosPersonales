@@ -75,9 +75,7 @@ class AccountDetailActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // Fetch the specific account to get the most up-to-date info
                 val cuentaResponse = APIClient.instance.getCuenta(currentCuenta.idCuenta).execute()
-                // Fetch ALL incomes and expenses
                 val ingresosResponse = APIClient.instance.getIngresos().execute()
                 val gastosResponse = APIClient.instance.getGastos().execute()
 
@@ -87,7 +85,6 @@ class AccountDetailActivity : AppCompatActivity() {
                         cuenta = fetchedCuenta // Update the local cuenta object
                         tvAccountName.text = fetchedCuenta.nombre
 
-                        // Incomes
                         val allIngresos = if (ingresosResponse.isSuccessful) ingresosResponse.body() ?: emptyList() else emptyList()
                         val filteredIngresos = allIngresos.filter { it.cuentaId == currentCuenta.idCuenta }
                         ingresoAdapter = IngresoAdapter(filteredIngresos)
@@ -95,7 +92,6 @@ class AccountDetailActivity : AppCompatActivity() {
                         llEmptyIngresos.visibility = if (filteredIngresos.isEmpty()) View.VISIBLE else View.GONE
                         rvIngresos.visibility = if (filteredIngresos.isEmpty()) View.GONE else View.VISIBLE
 
-                        // Expenses
                         val allGastos = if (gastosResponse.isSuccessful) gastosResponse.body() ?: emptyList() else emptyList()
                         val filteredGastos = allGastos.filter { it.cuentaId == currentCuenta.idCuenta }
                         gastoAdapter = GastoAdapter(filteredGastos)
@@ -103,7 +99,6 @@ class AccountDetailActivity : AppCompatActivity() {
                         llEmptyGastos.visibility = if (filteredGastos.isEmpty()) View.VISIBLE else View.GONE
                         rvGastos.visibility = if (filteredGastos.isEmpty()) View.GONE else View.VISIBLE
 
-                        // Calculate and set the final balance
                         val totalIngresos = filteredIngresos.sumOf { it.monto }
                         val totalGastos = filteredGastos.sumOf { it.monto }
                         val saldoActual = fetchedCuenta.saldoInicial + totalIngresos - totalGastos
